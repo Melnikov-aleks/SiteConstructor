@@ -49,6 +49,8 @@ export class Sidebar {
 
         let newBlock = '';
 
+        //hhhhr
+
         switch (name) {
             case 'Block':
                 newBlock = new DefaultBlock(value, { styles });
