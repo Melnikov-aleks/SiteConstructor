@@ -45,7 +45,7 @@ export class Sidebar {
 
         // console.log(options);
 
-        console.log(tag);
+        // console.log(tag);
 
         let newBlock = '';
 
