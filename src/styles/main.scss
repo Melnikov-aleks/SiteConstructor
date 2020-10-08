@@ -1,0 +1,33 @@
+#app {
+    position: relative;
+}
+.content {
+    position: absolute;
+    left: 200px;
+    right: 0;
+    top: 0;
+    padding: 0 15px;
+}
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 200px;
+    z-index: 100;
+    padding: 10px;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+.selected {
+    position: relative;
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border: 1px solid red;
+    }
+}
