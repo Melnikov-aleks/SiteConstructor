@@ -3,7 +3,9 @@
 }
 .content {
     position: absolute;
-    left: 200px;
+    // left: 200px;
+    width: 80%;
+    max-width: calc(100% - 200px);
     right: 0;
     top: 0;
     padding: 0 15px;
@@ -13,11 +15,25 @@
     top: 0;
     bottom: 0;
     left: 0;
-    width: 200px;
+    width: 20%;
+    min-width: 200px;
     z-index: 100;
     padding: 10px;
     box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
     overflow-y: auto;
+}
+.mouseOver {
+    position: relative;
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border: 1px solid blue;
+        pointer-events: none;
+    }
 }
 .selected {
     position: relative;
@@ -29,5 +45,63 @@
         left: 0;
         right: 0;
         border: 1px solid red;
+        pointer-events: none;
+    }
+}
+
+.breadcrumbs {
+    background-color: #e9ecef;
+    list-style: none;
+    line-height: 1;
+    &__parent {
+        position: relative;
+        &::after {
+            position: absolute;
+            content: '';
+            top: calc(50% - 1px);
+            border-top: 2px solid red;
+            right: -0.9rem;
+            left: calc(100% + 0.1rem);
+        }
+    }
+    &__childrens-list {
+        list-style: none;
+        position: relative;
+        &::before {
+            position: absolute;
+            content: '';
+            top: calc(0.5rem - 1px);
+            bottom: calc(0.5rem - 1px);
+            left: calc(-0.5rem - 1px);
+            border-left: 2px solid red;
+        }
+    }
+
+    .childrens-list__item {
+        position: relative;
+        &::before {
+            position: absolute;
+            content: '';
+            top: calc(50% - 1px);
+            left: -0.5rem;
+            right: calc(100% + 0.1rem);
+            border-top: 2px solid red;
+        }
+    }
+    &__current {
+        position: relative;
+        &::after {
+            position: absolute;
+            content: '';
+            top: calc(50% - 1px);
+            right: -0.5rem;
+            left: calc(100% + 0.1rem);
+            border-top: 2px solid red;
+        }
+    }
+    :last-child {
+        &::after {
+            border: none;
+        }
     }
 }

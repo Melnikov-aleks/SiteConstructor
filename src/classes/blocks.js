@@ -1,14 +1,9 @@
-import { row, css, col } from '../utils';
+import { row, css, col, html } from '../utils';
 
 class Block {
     constructor(value, options) {
         this.value = value;
         this.options = options;
-        this.hash = value.toString()
-            ? value.toString().charCodeAt(0) * Date.now()
-            : Date.now();
-        console.log(Date.now(), this.hash);
-        // this.hash = model.length;
     }
 
     toHTML() {
@@ -19,65 +14,79 @@ class Block {
 export class DefaultBlock extends Block {
     constructor(value, options) {
         super(value, options);
+        this.namel = 'def';
     }
 
     toHTML() {
-        const { styles } = this.options;
-        if (typeof this.value == 'object') {
-            return row(this.value.toHTML(), css(styles));
-        }
-        return row(this.value, css(styles));
+        const { styles, classes = '' } = this.options;
+        return row(this.value.map(html).join(''), css(styles), classes);
     }
 }
+export class ColumnBlock extends Block {
+    constructor(value, options) {
+        super(value, options);
+        this.namel = 'col';
+    }
+
+    toHTML() {
+        const { styles, classes = '' } = this.options;
+        return col(this.value.map(html).join(''), css(styles), classes);
+    }
+}
+
 export class TitleBlock extends Block {
     constructor(value, options) {
         super(value, options);
+        this.namel = 'title';
     }
 
     toHTML() {
-        const { tag = 'h1', column, styles } = this.options;
-        console.log(tag);
-        const html = `<${tag} style="${css(styles)}" data-hash="${this.hash}" >${
-            this.value
-        }</${tag}>`;
-        if (column) return col(html);
-        return html;
+        const { tag = 'h1', columns, styles, classes = '' } = this.options;
+        const innerHTML = this.value.map((content) => {
+            if (typeof content === 'string') {
+                return `<${tag} class="${classes}" style="${css(
+                    styles
+                )}">${content}</${tag}>`;
+            }
+            return content.toHTML();
+        });
+
+        if (columns) return col(innerHTML.join(''));
+        return innerHTML.join('');
     }
 }
+
 export class TextBlock extends Block {
     constructor(value, options) {
         super(value, options);
+        this.namel = 'text';
     }
 
     toHTML() {
-        const { styles, column } = this.options;
-        const html = `<p style="${css(styles)}" data-hash="${this.hash}">${
-            this.value
-        }</p>`;
-        if (column) return col(html);
-        return html;
-    }
-}
-export class ColumnsBlock extends Block {
-    constructor(value, options) {
-        super(value, options);
-    }
+        const { styles, columns, classes = '' } = this.options;
+        const innerHTML = this.value.map((content) => {
+            if (typeof content === 'string') {
+                return `<p class="${classes}" style="${css(styles)}">${content}</p>`;
+            }
+            return content.toHTML();
+        });
 
-    toHTML() {
-        const { styles } = this.options;
-        const html = this.value.map(col).join('');
-        return row(html, css(styles));
+        if (columns) return col(innerHTML.join(''));
+        return innerHTML.join('');
     }
 }
+
 export class ImageBlock extends Block {
     constructor(value, options) {
         super(value, options);
     }
 
     toHTML() {
-        const { styles, alt, column } = this.options;
-        const html = `<img src="${this.value}" alt="${alt}" style="${css(styles)}">`;
-        if (column) return col(html);
-        return html;
+        const { styles, alt, columns, classes = '' } = this.options;
+        const innerHTML = `<img class="${classes}" src="${
+            this.value
+        }" alt="${alt}" style="${css(styles)}">`;
+        if (columns) return col(innerHTML);
+        return innerHTML;
     }
 }
