@@ -14,7 +14,6 @@ class Block {
 export class DefaultBlock extends Block {
     constructor(value, options) {
         super(value, options);
-        this.namel = 'def';
     }
 
     toHTML() {
@@ -25,7 +24,6 @@ export class DefaultBlock extends Block {
 export class ColumnBlock extends Block {
     constructor(value, options) {
         super(value, options);
-        this.namel = 'col';
     }
 
     toHTML() {
@@ -37,11 +35,10 @@ export class ColumnBlock extends Block {
 export class TitleBlock extends Block {
     constructor(value, options) {
         super(value, options);
-        this.namel = 'title';
     }
 
     toHTML() {
-        const { tag = 'h1', columns, styles, classes = '' } = this.options;
+        const { tag = 'h1', styles, classes = '' } = this.options;
         const innerHTML = this.value.map((content) => {
             if (typeof content === 'string') {
                 return `<${tag} class="${classes}" style="${css(
@@ -51,7 +48,6 @@ export class TitleBlock extends Block {
             return content.toHTML();
         });
 
-        if (columns) return col(innerHTML.join(''));
         return innerHTML.join('');
     }
 }
@@ -59,11 +55,10 @@ export class TitleBlock extends Block {
 export class TextBlock extends Block {
     constructor(value, options) {
         super(value, options);
-        this.namel = 'text';
     }
 
     toHTML() {
-        const { styles, columns, classes = '' } = this.options;
+        const { styles, classes = '' } = this.options;
         const innerHTML = this.value.map((content) => {
             if (typeof content === 'string') {
                 return `<p class="${classes}" style="${css(styles)}">${content}</p>`;
@@ -71,7 +66,6 @@ export class TextBlock extends Block {
             return content.toHTML();
         });
 
-        if (columns) return col(innerHTML.join(''));
         return innerHTML.join('');
     }
 }
@@ -82,11 +76,11 @@ export class ImageBlock extends Block {
     }
 
     toHTML() {
-        const { styles, alt, columns, classes = '' } = this.options;
-        const innerHTML = `<img class="${classes}" src="${
-            this.value
-        }" alt="${alt}" style="${css(styles)}">`;
-        if (columns) return col(innerHTML);
+        const { styles, classes = '' } = this.options;
+        const innerHTML = `<img class="${classes}" src="${this.value}" style="${css(
+            styles
+        )}">`;
+
         return innerHTML;
     }
 }

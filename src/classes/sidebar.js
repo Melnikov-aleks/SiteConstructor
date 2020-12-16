@@ -1,18 +1,23 @@
-import { blockCreator, blockRedactor, blockBreadcrumbs } from '../utils';
+import { blockCreator, blockRedactor, blockBreadcrumbs, formValidate } from '../utils';
 import { TextBlock, TitleBlock, DefaultBlock, ImageBlock, ColumnBlock } from './blocks';
 
 export class Sidebar {
-    constructor(selector, updateCallbeck, redactorCallback) {
+    constructor(selector, updateCallbeck) {
         this.elem = document.querySelector(selector);
         this.update = updateCallbeck;
-        this.redactor = redactorCallback;
 
         this.init();
     }
 
     init() {
-        this.elem.insertAdjacentHTML('beforeend', this.templateCreator);
+        this.elem.insertAdjacentHTML('afterbegin', this.templateCreator);
+        this.elem.insertAdjacentHTML(
+            'beforeend',
+            `<button type="button" id="deleteBtn" value="deleteAll" class="btn btn-danger btn-sm btn-block">Удалить все</button>`
+        );
+
         this.elem.addEventListener('submit', this.add.bind(this));
+        this.elem.addEventListener('click', this.delete.bind(this));
 
         this.elem.addEventListener('change', this.showSet.bind(this));
     }
@@ -22,7 +27,9 @@ export class Sidebar {
             this.elem.querySelector('#sidebar__redactor').remove();
         }
         if (block && block !== site) {
-            this.elem.insertAdjacentHTML('beforeend', blockRedactor(block));
+            this.elem
+                .querySelector('#deleteBtn')
+                .insertAdjacentHTML('beforebegin', blockRedactor(block));
         }
     }
     showBreadcrumbs(block, site) {
@@ -30,7 +37,9 @@ export class Sidebar {
             this.elem.querySelector('#sidebar__breadcrumbs').remove();
         }
         if (block) {
-            this.elem.insertAdjacentHTML('beforeend', blockBreadcrumbs(block, site));
+            this.elem
+                .querySelector('#createForm')
+                .insertAdjacentHTML('afterend', blockBreadcrumbs(block, site));
             this.elem
                 .querySelector('.breadcrumbs')
                 .addEventListener('click', breadcrumbsEventHandler);
@@ -45,7 +54,7 @@ export class Sidebar {
         function breadcrumbsEventHandler(event) {
             switch (true) {
                 case !event.target.classList.contains('breadcrumbs-item'):
-                    return;
+                    break;
                 case event.target.classList.contains('breadcrumbs__parent'):
                     let myEvent = new MouseEvent(event.type, {
                         bubbles: true,
@@ -75,23 +84,30 @@ export class Sidebar {
         return blockCreator();
     }
 
+    delete(event) {
+        if (
+            !event ||
+            !event.target ||
+            (event.target.value !== 'deleteAll' && event.target.value !== 'deleteEl')
+        )
+            return;
+        const newBlock = { action: event.target.value };
+        this.update(newBlock);
+    }
+
     add(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
-
-        console.log([...formData.keys()]);
+        const newBlock = {};
         const options = {};
+
+        if (!formValidate(event.target)) return;
 
         formData.has('styles') ? (options.styles = formData.get('styles')) : false;
         formData.has('tag') ? (options.tag = formData.get('tag')) : false;
         formData.has('classes') ? (options.classes = formData.get('classes')) : false;
 
-        const newBlock = {};
-
         switch (formData.get('type')) {
-            case 'Block':
-                newBlock.block = new DefaultBlock([formData.get('value')], options);
-                break;
             case 'Text':
                 newBlock.block = new TextBlock([formData.get('value')], options);
                 break;
@@ -99,10 +115,7 @@ export class Sidebar {
                 newBlock.block = new TitleBlock([formData.get('value')], options);
                 break;
             case 'Image':
-                newBlock.block = new TextBlock([formData.get('value')], options);
-                break;
-            case 'Columns':
-                newBlock.block = new TextBlock([formData.get('value')], options);
+                newBlock.block = new ImageBlock([formData.get('value')], options);
                 break;
         }
 
@@ -118,7 +131,7 @@ export class Sidebar {
             });
         }
 
-        newBlock.position = formData.get('position') ?? 'instead';
+        newBlock.action = formData.get('position') ?? 'Instead';
 
         if (!formData.has('type')) {
             newBlock.options = options;
@@ -135,8 +148,17 @@ export class Sidebar {
     showSet(event) {
         const form = event.target.form ?? event.target;
 
-        if (form.name === 'redactorElement') return;
+        formValidate(form);
 
+        if (form.name === 'redactorElement' || form.name === 'delete') return;
+
+        if (form.type.value === 'Image') {
+            form.querySelector('#labelValue').innerHTML = 'Изображение';
+            form.querySelector('#inputValue').placeholder = 'src';
+        } else {
+            form.querySelector('#labelValue').innerHTML = 'Текст';
+            form.querySelector('#inputValue').placeholder = 'value';
+        }
         if (form.type.value === 'Title')
             form.querySelector('#tagGroup').classList.remove('collapse');
         else form.querySelector('#tagGroup').classList.add('collapse');
@@ -149,6 +171,7 @@ export class Sidebar {
             form.querySelector('#columnGroup').classList.remove('collapse');
         else form.querySelector('#columnGroup').classList.add('collapse');
     }
+
     setStateRadio(element, site) {
         if (element && element.tagName) {
             switch (true) {

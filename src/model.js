@@ -6,195 +6,102 @@ import {
     ColumnBlock,
 } from './classes/blocks';
 export const model = [
-    // new DefaultBlock(
-    //     [
-    //         new TitleBlock(['Hi from constuctor0!'], {
-    //             tag: 'h2',
-    //             styles: {
-    //                 background: 'linear-gradient(to right, #ff0099, #493240)',
-    //                 color: '#fff',
-    //                 padding: '1.5rem',
-    //                 'text-align': 'center',
-    //             },
-    //             columns: true,
-    //         }),
-    //         new TitleBlock(
-    //             [
-    //                 new DefaultBlock(
-    //                     [
-    //                         new TitleBlock(['Hi1'], {
-    //                             tag: 'h2',
-    //                             styles: {
-    //                                 background:
-    //                                     'linear-gradient(to right, #ff0099, #493240)',
-    //                                 color: '#fff',
-    //                                 padding: '1.5rem',
-    //                                 'text-align': 'center',
-    //                             },
-    //                             columns: true,
-    //                         }),
-    //                         new TitleBlock(['Hi2'], {
-    //                             tag: 'h2',
-    //                             styles: {
-    //                                 background:
-    //                                     'linear-gradient(to right, #ff0099, #493240)',
-    //                                 color: '#fff',
-    //                                 padding: '1.5rem',
-    //                                 'text-align': 'center',
-    //                             },
-    //                             columns: true,
-    //                         }),
-    //                     ],
-    //                     {
-    //                         styles: {
-    //                             background: 'blue',
-    //                             color: '#fff',
-    //                             padding: '1.5rem',
-    //                             'text-align': 'center',
-    //                         },
-    //                     }
-    //                 ),
-    //                 'Hi3',
-    //                 'Hi4',
-    //             ],
-    //             {
-    //                 tag: 'h2',
-    //                 styles: {
-    //                     background: 'linear-gradient(to right, #ff0099, #493240)',
-    //                     color: '#fff',
-    //                     padding: '1.5rem',
-    //                     'text-align': 'center',
-    //                 },
-    //                 columns: true,
-    //             }
-    //         ),
-    //     ],
-    //     {
-    //         styles: {
-    //             background: 'green',
-    //             color: '#fff',
-    //             padding: '1.5rem',
-    //             'text-align': 'center',
-    //         },
-    //     }
-    // ),
-    // new DefaultBlock(
-    //     [
-    //         new TitleBlock(['Hi from constuctor!'], {
-    //             tag: 'h4',
-    //             styles: {
-    //                 background: 'linear-gradient(to right, #ff0099, #493240)',
-    //                 color: '#fff',
-    //                 padding: '1.5rem',
-    //                 'text-align': 'center',
-    //             },
-    //         }),
-    //     ],
-    //     {
-    //         styles: {
-    //             background: 'blue',
-    //             color: '#fff',
-    //             padding: '1.5rem',
-    //             'text-align': 'center',
-    //         },
-    //     }
-    // ),
-
-    // new TitleBlock(['Hi from constuctor9!'], {
-    //     tag: 'h2',
-    //     styles: {
-    //         background: 'linear-gradient(to right, #ff0099, #493240)',
-    //         color: '#fff',
-    //         padding: '1.5rem',
-    //         'text-align': 'center',
-    //     },
-    //     columns: true,
-    // }),
-    // new TitleBlock(['Hi from constuctor10!'], {
-    //     tag: 'h2',
-    //     styles: {
-    //         background: 'linear-gradient(to right, #ff0099, #493240)',
-    //         color: '#fff',
-    //         padding: '1.5rem',
-    //         'text-align': 'center',
-    //     },
-    // }),
-
-    // new ImageBlock(['./src/assets/image.png'], {
-    //     // styles: {
-    //     //     padding: '2rem 0',
-    //     //     display: 'flex',
-    //     //     'justify-content': 'center',
-    //     // },
-    //     styles: {
-    //         height: '200px',
-    //         weight: 'auto',
-    //     },
-    //     alt: 'alt',
-    //     column: true,
-    // }),
-    // new TextBlock(['leoeofmlwefmewflemfj'], {
-    //     styles: {
-    //         background: 'linear-gradient(to left, #f2994a, #f2c94c)',
-    //         padding: '1rem',
-    //         'font-weight': 'bold',
-    //     },
-    // }),
-
     new DefaultBlock(
         [
-            new TitleBlock(['Create your SITE'], {
-                styles: {
-                    color: 'blue',
-                },
-            }),
+            new ColumnBlock(
+                [
+                    new TitleBlock(['Site constructor'], {
+                        classes: 'text-center',
+                    }),
+                    new TextBlock(
+                        [
+                            "Сайт создан на мини-курсе Владилена Минина 'Конструктор сайтов на JS'",
+                        ],
+                        {
+                            classes: 'text-center',
+                        }
+                    ),
+                ],
+                {
+                    classes: 'col-sm-6 pt-3 pb-3 text-light rounded',
+                    styles: 'background-color:rgba(0,0,0,0.8)',
+                }
+            ),
         ],
         {
-            styles: {
-                background: 'gray',
-                padding: '1rem',
-            },
+            classes: 'justify-content-center align-items-center',
+            styles:
+                "min-height:400px; background:center/cover no-repeat url('assets/header-background.jpg');",
         }
     ),
     new DefaultBlock(
         [
             new ColumnBlock(
                 [
-                    new TitleBlock(['nawi preimyshestva'], {
-                        styles: {
-                            color: 'green',
-                            'text-align': 'center',
-                        },
-                    }),
-                    new TextBlock(['description'], {
-                        styles: {
-                            color: 'green',
-                            'text-align': 'center',
-                        },
-                    }),
+                    new TextBlock(
+                        [
+                            'Для добавления элемента выберете его тип, введите значение, и если необходимо, присвойте классы и стили.',
+                        ],
+                        {}
+                    ),
+                    new TextBlock(
+                        [
+                            'Для стилизации используется сетка Bootstrap. При необходимости можно обернуть добавляемый элемент в блок с классом row и col.',
+                        ],
+                        {}
+                    ),
+                    new TextBlock(
+                        [
+                            "При клике по элементу становится доступен выбор позиции вставки нового элемента относительно выбранного. Также под меню создания появляется 'Breadcrumbs', показывающий выбранный элемент, его предка и потомка(ов) при наличии.",
+                        ],
+                        {}
+                    ),
                 ],
                 {
-                    styles: {
-                        background: 'yellow',
-                    },
+                    classes:
+                        'col-sm-5 d-flex flex-column justify-content-center align-items-center',
                 }
             ),
             new ColumnBlock(
                 [
-                    new TitleBlock(['vashi preimyshestva'], {
-                        styles: {
-                            color: 'orange',
-                            'text-align': 'center',
-                        },
+                    new ImageBlock(['assets/site-construction.png'], {
+                        classes: 'img-fluid',
                     }),
                 ],
                 {
-                    styles: {
-                        background: 'pink',
-                    },
+                    classes: 'col-sm-7',
                 }
             ),
         ],
-        {}
+        { classes: 'pt-3 pb-3', styles: 'background: #9AA0AC' }
+    ),
+    new DefaultBlock(
+        [
+            new ColumnBlock(
+                [
+                    new ImageBlock(['assets/site-redactor.png'], {
+                        classes: 'img-fluid',
+                    }),
+                ],
+                {
+                    classes: 'col-sm-7',
+                }
+            ),
+            new ColumnBlock(
+                [
+                    new TextBlock(
+                        [
+                            'Чтобы отредактировать элемент, кликните по нему и в появившейся слева форме установите необходимое содержание, классы и стили.',
+                        ],
+                        {}
+                    ),
+                ],
+                {
+                    classes:
+                        'col-sm-5 d-flex flex-column justify-content-center align-items-center',
+                }
+            ),
+        ],
+        { classes: 'pt-3 pb-3', styles: 'background: #7A90B8' }
     ),
 ];

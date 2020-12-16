@@ -51,21 +51,27 @@ export class App {
         };
 
         const insideModel = (newBlock) => {
-            switch (newBlock.position) {
-                case 'docEnd':
+            switch (newBlock.action) {
+                case 'deleteEl':
+                    this.elem.elParent.splice(this.elem.index, 1);
+                    break;
+                case 'deleteAll':
+                    this.model = [];
+                    break;
+                case 'DocEnd':
                     this.model.push(newBlock.block);
                     break;
-                case 'inside':
+                case 'Inside':
                     this.elem.el.value.push(newBlock.block);
                     break;
-                case 'before':
+                case 'Before':
                     for (let i = this.elem.elParent.length; i > this.elem.index; i--) {
                         this.elem.elParent[i] = this.elem.elParent[i - 1];
                     }
 
                     this.elem.elParent[this.elem.index] = newBlock.block;
                     break;
-                case 'after':
+                case 'After':
                     for (
                         let i = this.elem.elParent.length;
                         i > this.elem.index + 1;
@@ -75,9 +81,8 @@ export class App {
                     }
 
                     this.elem.elParent[this.elem.index + 1] = newBlock.block;
-
                     break;
-                case 'instead':
+                case 'Instead':
                     newBlock.options ? (this.elem.el.options = newBlock.options) : false;
                     newBlock.value ? (this.elem.el.value = newBlock.value) : false;
                     break;
@@ -85,7 +90,6 @@ export class App {
         };
         const updateCallbeck = (newBlock) => {
             insideModel(newBlock);
-
             site.render(this.model);
         };
 

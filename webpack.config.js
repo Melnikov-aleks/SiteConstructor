@@ -10,14 +10,15 @@ const CSSMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
 
-const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`);
+const getFilename = (ext = '[ext]') =>
+    isDev ? `[name].${ext}` : `[name].[contenthash].${ext}`;
 
 module.exports = {
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
     entry: ['@babel/polyfill', './index.js'],
     output: {
-        filename: filename('js'),
+        filename: getFilename('js'),
         path: path.resolve(__dirname, 'dist'),
     },
     optimization: {
@@ -25,12 +26,13 @@ module.exports = {
         minimizer: [new TerserWebpackPlugin(), new CSSMinimizerWebpackPlugin()],
     },
     devServer: {
+        hot: isDev,
         historyApiFallback: true,
         port: 3005,
-        hot: isDev,
+        host: '0.0.0.0',
         clientLogLevel: 'silent',
     },
-    devtool: isDev ? 'source-map' : '',
+    devtool: isDev && 'source-map',
     plugins: [
         new CleanWebpackPlugin(),
         new HTMLWebpackPlugin({
@@ -38,25 +40,25 @@ module.exports = {
             collapseWhitespace: isProd,
         }),
         new MiniCssExtractPlugin({
-            filename: filename('css'),
+            filename: getFilename('css'),
         }),
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
         }),
-        // new CopyWebpackPlugin({
-        //     patterns: [
-        //         {
-        //             from: path.resolve(__dirname, 'src/favicon.ico'),
-        //             to: path.resolve(__dirname, 'dist'),
-        //         },
-        //     ],
-        // }),
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: path.resolve(__dirname, 'src/assets'),
+                    to: path.resolve(__dirname, 'dist/assets'),
+                },
+            ],
+        }),
     ],
     module: {
         rules: [
             {
-                test: /\.scss$/,
+                test: /\.s[ac]ss$/,
                 use: [
                     {
                         loader: MiniCssExtractPlugin.loader,
@@ -68,7 +70,14 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|svg|gif)$/,
-                use: ['file-loader'],
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: getFilename(),
+                        },
+                    },
+                ],
             },
             {
                 test: /\.js$/,
@@ -77,6 +86,18 @@ module.exports = {
                     {
                         loader: 'babel-loader',
                         options: { presets: ['@babel/preset-env'] },
+                    },
+                ],
+            },
+            {
+                test: /\.(ttf|woff|woff2|eot|otf)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            outputPath: 'fonts',
+                            name: getFilename(),
+                        },
                     },
                 ],
             },

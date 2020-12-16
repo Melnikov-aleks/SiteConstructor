@@ -26,6 +26,22 @@ function getChildrensList(childrens) {
     }
     return htmlChilds.join('');
 }
+
+export function formValidate(form) {
+    let valide = true;
+    if (form.position) {
+        form.position.forEach((radio) => {
+            if (radio.checked && radio.hasAttribute('disabled')) {
+                radio.classList.add('is-invalid');
+                return (valide = false);
+            }
+            radio.classList.remove('is-invalid');
+        });
+    }
+
+    return valide;
+}
+
 export function blockBreadcrumbs(block, site) {
     const html = [];
 
@@ -58,7 +74,7 @@ export function blockBreadcrumbs(block, site) {
 
 export function blockCreator() {
     return `
-	<form name="creatorElement" id"kj"> 
+	<form name="creatorElement" id="createForm"> 
 		<h5>Вставить новый элемент</h5>
 		<div class="form-group">
 			<label class="mb-1" for="SelectElement">Элемент для вставки</label>
@@ -69,7 +85,7 @@ export function blockCreator() {
 			</select>
 		</div>
 		<div class="form-group form-row" id="tagGroup">
-			<label class="col-sm col-form-label" for="value">Tag</label>
+			<label class="col-sm col-form-label" for="value">Тэг</label>
 			<div class="col-sm-9">
 				<select class="form-control" id="TagElement" name="tag">
 					<option>h1</option>
@@ -82,61 +98,73 @@ export function blockCreator() {
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="mb-1" for="value">3ha4enie</label>
-			<input class="form-control form-control-sm" name="value" placeholder="value">
+			<label class="mb-1" id="labelValue" for="value">Текст</label>
+			<input class="form-control form-control-sm" id="inputValue" name="value" placeholder="value">
 		</div>
 		<div class="form-group">
-			<label class="mb-1" for="styles">Classy</label>
+			<label class="mb-1" for="styles">Классы</label>
 			<input class="form-control form-control-sm" name="classes" placeholder="classes">
 		</div>
 		<div class="form-group">
-			<label class="mb-1" for="styles">Stili</label>
+			<label class="mb-1" for="styles">Стили</label>
 			<input class="form-control form-control-sm" name="styles" placeholder="styles">
 		</div>
 		<div class="form-group">
 			<div class="form-group mb-0">
 				<div class="form-check">
 					<input class="form-check-input" type="checkbox" name="block" id="useBlock" >
-					<label class="form-check-label" for="useBlock">Use block</label>
+					<label class="form-check-label" for="useBlock">Обернуть в блок row</label>
 				</div>
 				<div class="form-group collapse" id="blockGroup">
-					<label class="mb-1" for="styles">Stili Bloka</label>
+					<label class="mb-1" for="styles">Стили для блока</label>
 					<input class="form-control form-control-sm" name="blockStyles" placeholder="styles">
 				</div>
 			</div>
 			<div class="form-group">
 				<div class="form-check">
 					<input class="form-check-input" type="checkbox" name="column" id="useColumns">
-					<label class="form-check-label" for="useColumns">Use columns</label>
+					<label class="form-check-label" for="useColumns">Обернуть в колонку</label>
 				</div>
 				<div class="form-group collapse" id="columnGroup">
-					<label class="mb-1" for="styles">Stili Colonki</label>
+					<label class="mb-1" for="styles">Стили колонки</label>
 					<input class="form-control form-control-sm" name="columnStyles" placeholder="styles">
 				</div>
 			</div>
 		</div>
-		<div class="form-group">
-			<legend class="col-form-label mb-1" for="styles">Pozition vstavki</legend>
-			<div class="form-check ">
-				<input class="form-check-input" type="radio" name="position" id="posDocEnd" value="docEnd" checked>
-				<label class="form-check-label" for="posDocEnd">V konce doc</label>
+		<div class="form-group" id="radios">
+			<legend class="col-form-label mb-1" for="styles">Позиция вставки</legend>
+			<div class="form-check">
+				<input class="form-check-input" type="radio" name="position" id="posDocEnd" value="DocEnd" checked>
+				<label class="form-check-label" for="posDocEnd">В конец сайта</label>
+				<div class="invalid-feedback">
+					Нельзя использовать эту позицию
+				</div>
 			</div>
-			<div class="form-check ">
-				<input class="form-check-input" type="radio" name="position" id="posBefore" value="before" disabled>
-				<label class="form-check-label" for="posBefore">Pered elementom</label>
+			<div class="form-check">
+				<input class="form-check-input" type="radio" name="position" id="posBefore" value="Before" disabled>
+				<label class="form-check-label" for="posBefore">Перед элементом</label>
+				<div class="invalid-feedback">
+					Нельзя использовать эту позицию
+				</div>
 			</div>
-			<div class="form-check ">
-				<input class="form-check-input" type="radio" name="position" id="posAfter" value="after" disabled>
-				<label class="form-check-label" for="posAfter">Posle elementa</label>
+			<div class="form-check">
+				<input class="form-check-input" type="radio" name="position" id="posAfter" value="After" disabled>
+				<label class="form-check-label" for="posAfter">После элемента</label>
+				<div class="invalid-feedback">
+					Нельзя использовать эту позицию
+				</div>
 			</div>
-			<div class="form-check ">
-				<input class="form-check-input" type="radio" name="position" id="posInside" value="inside" disabled>
-				<label class="form-check-label" for="posInside">Vnytri elementa</label>
+			<div class="form-check">
+				<input class="form-check-input" type="radio" name="position" id="posInside" value="Inside" disabled>
+				<label class="form-check-label" for="posInside">Внутри элемента</label>
+				<div class="invalid-feedback">
+					Нельзя использовать эту позицию
+				</div>
 			</div>
 		</div>
 		<button type="submit" class="btn btn-primary btn-sm">Добавить</button>
+		<hr />
 	</form>
-	<hr />
 	`;
 }
 export function blockRedactor(block) {
@@ -156,7 +184,7 @@ export function blockRedactor(block) {
 
             formValue.push(`
 			<div class="form-group">
-				<label class="mb-1" for="value">3ha4enie</label>
+				<label class="mb-1" for="value">Текст</label>
 				<input class="form-control form-control-sm" name="value" placeholder="value" value="${block.innerHTML}">
 			</div>
 			`);
@@ -164,7 +192,7 @@ export function blockRedactor(block) {
         case /^p/i.test(block.tagName):
             formValue.push(`
 			<div class="form-group">
-				<label class="mb-1" for="value">3ha4enie</label>
+				<label class="mb-1" for="value">Текст</label>
 				<input class="form-control form-control-sm" name="value" placeholder="value" value="${block.innerHTML}">
 			</div>
 			`);
@@ -179,27 +207,36 @@ export function blockRedactor(block) {
 
     return `
 	<form name="redactorElement" id="sidebar__redactor">
+		<hr />
 		<h5>Изменить элемент</h5>
 		<div class="form-group form-row">
-			<label class="col-sm col-form-label" for="value">Tag</label>
+			<label class="col-sm col-form-label" for="value">Тэг</label>
 			<div class="col-sm-9">
 				${tagOptions.join('')}
 			</div>
 		</div>
 		${formValue.join('')}
 		<div class="form-group">
-			<label class="mb-1" for="styles">Classy</label>
+			<label class="mb-1" for="styles">Классы</label>
 			<input class="form-control form-control-sm" name="classes" placeholder="classes" value="${block.classList
                 .toString()
                 .replace('selected', '')}">
 		</div>
 		<div class="form-group">
-			<label class="mb-1" for="styles">Stili</label>
+			<label class="mb-1" for="styles">Стили</label>
 			<input class="form-control form-control-sm" name="styles" placeholder="styles" value="${block.getAttribute(
                 'style'
             )}">
 		</div>
-		<button type="submit" class="btn btn-primary btn-sm">Primenit'</button>
+		<div class="form-group form-row">
+			<div class="col">
+			<button type="submit" class="btn btn-primary btn-sm btn-block">Применить</button>
+			</div>
+			<div class="col">
+			<button type="button" value="deleteEl" class="btn btn-danger btn-sm btn-block">Удалить</button>
+			</div>
+		</div>
+		<hr />
 	</form>
 	`;
 }

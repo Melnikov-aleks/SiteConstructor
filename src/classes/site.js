@@ -4,10 +4,6 @@ export class Site {
         this.redactor = redactorCallback;
     }
     render(model) {
-        // let myjson = JSON.stringify(model, ['namel', 'value'], 2);
-        // let x = window.open();
-        // x.document.write('<html><body><pre>' + myjson + '</pre></body></html>');
-
         this.elem.innerHTML = '';
         model.forEach((block) => {
             this.elem.insertAdjacentHTML('beforeend', block.toHTML());
@@ -30,7 +26,6 @@ export class Site {
                 event.target.classList.remove('mouseOver');
                 break;
         }
-        // event.target.classList.toggle('mouseOver');
     }
 
     borderSelect(select) {
